@@ -1,0 +1,5 @@
+test-package_android.zip
+.pytest_cache
+.alttrashcat-env
+.vscode
+__pycache__
