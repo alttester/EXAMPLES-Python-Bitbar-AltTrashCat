@@ -50,6 +50,6 @@ fi
 echo "Running tests"
 
 rm -rf screenshots
-python -m pytest tests/start_page_test.py --junitxml=test-reports/report.xml
+python -m pytest tests/ --junitxml=test-reports/report.xml
 
 mv test-reports/*.xml TEST-all.xml

@@ -14,7 +14,7 @@ pip install -r requirements.txt
 echo "Starting Appium ..."
 
 appium --log-no-colors --log-timestamp  --command-timeout 60  > appium.log 2>&1 &
-
+sleep 10
 ps -ef|grep appium
 ##### Cloud testrun dependencies end.
 
@@ -34,6 +34,6 @@ export APPIUM_AUTOMATION="uiautomator2"
 echo "Running tests:"
 rm -rf screenshots
 
-python -m pytest tests --junitxml=test-reports/report.xml
+python -m pytest tests/ --junitxml=test-reports/report.xml
 
-mv test-reports/*.xml TEST-all.xml
+killall node

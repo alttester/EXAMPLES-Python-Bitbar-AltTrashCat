@@ -10,17 +10,22 @@ import os
 from appium import webdriver
 
 class TestBase(unittest.TestCase):
-    plaform = os.getenv('TESTS_PLATFORM', 'android')
+    platform = None
+    if os.getenv("APPIUM_PLATFORM", "Android") == 'Android':
+        platform = 'android'
+    else:
+        platform = 'ios'
 
     @classmethod
     def setUpClass(cls):
         cls.desired_caps = {}
-        cls.desired_caps['platformName'] = 'Android'
-        cls.desired_caps['deviceName'] = 'device'
+        cls.desired_caps['platformName'] = os.getenv('APPIUM_PLATFORM', 'Android')
+        cls.desired_caps['deviceName'] = os.getenv('APPIUM_DEVICE', 'device')
         cls.desired_caps['app'] = os.getenv("APPIUM_APPFILE", "application.apk")
+        cls.desired_caps['automationName'] = os.getenv('APPIUM_AUTOMATION', 'UIAutomator2')
         cls.driver = webdriver.Remote('http://localhost:4723/wd/hub', cls.desired_caps)
 
-        cls.altdriver = AltrunUnityDriver(cls.driver, cls.plaform)
+        cls.altdriver = AltrunUnityDriver(cls.driver, cls.platform)
 
     @classmethod
     def tearDownClass(cls):

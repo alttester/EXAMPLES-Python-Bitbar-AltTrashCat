@@ -19,7 +19,11 @@ else
     print_help_and_die
 fi
 
+find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
+
 TEST_FILE="test-package_${ENV}.zip"
+
+rm ${TEST_FILE}
 
 echo "Creating test file for environment: ${ENV}"
 cp run-tests_${ENV}.sh run-tests.sh && zip -r "${TEST_FILE}" tests/ pages/ requirements.txt *py run-tests.sh

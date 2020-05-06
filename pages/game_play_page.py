@@ -8,7 +8,7 @@ class GamePlayPage(BasePage):
     @property
     def pause_button(self):
         return self.altdriver.wait_for_element('Game/WholeUI/pauseButton', timeout=2)
-    
+
     @property
     def character(self):
         return self.altdriver.wait_for_element('PlayerPivot', timeout=2)
@@ -40,7 +40,7 @@ class GamePlayPage(BasePage):
             obstacle = obstacles[0]
             print("OBSTACLE: " + obstacle.name + ", z:" + obstacle.worldZ + ", x:" + obstacle.worldX)
             print("NEXT: " + obstacles[1].name + ", z:" + obstacles[1].worldZ + ", x:" + obstacles[1].worldX)
-            
+
             while(float(obstacle.worldZ) - float(character.worldZ) > 5):
                 obstacle = self.altdriver.find_element("id(" + obstacle.id + ")")
                 character = self.altdriver.find_element("PlayerPivot")

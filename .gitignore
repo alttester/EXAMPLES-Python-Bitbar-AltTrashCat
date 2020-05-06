@@ -3,3 +3,5 @@ test-package_android.zip
 .alttrashcat-env
 .vscode
 __pycache__
+appium.log
+test-reports/report.xml

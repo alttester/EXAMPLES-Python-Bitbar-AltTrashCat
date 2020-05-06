@@ -6,25 +6,14 @@ TEST=${TEST:="BitbarSampleAppTest.py"}
 echo "Extracting tests.zip..."
 unzip -o tests.zip
 
+echo "Setting up python env:"
+python3 -m venv .venv
+source .venv/bin/activate
 
-#########################################################
-#
-# Intalling PIP and required Python libraries
-#  - required libraries are in requirement.txt file that
-#    is uploaded with this script file
-#
-#########################################################
-
-echo "Installing pip"
-curl https://bootstrap.pypa.io/get-pip.py | python - --user
-
-echo "Exporting PATH for pip"
-export PATH=/Users/testdroid/Library/Python/2.7/bin:${PATH}
-echo "New PATH: ${PATH}"
-
-echo "Installing requirements from requirements.txt"
+echo "Installing requirements"
 chmod 0755 requirements.txt
-pip install --user  --requirement requirements.txt
+pip install -r requirements.txt
+
 
 #########################################################
 #
@@ -55,19 +44,13 @@ export APPIUM_DEVICE="Local Device"
 export APPIUM_PLATFORM="IOS"
 export APPIUM_AUTOMATION="XCUITest"
 
-## Clean local screenshots directory
-rm -rf screenshots
+
+## check iproxy
+iproxy --version
 
 ## Start test execution
-echo "Running test ${TEST}"
-python ${TEST}
+## Run the test:
+echo "Running tests"
+python3 -m pytest -s tests/ --junitxml=test-reports/report.xml
 
-#########################################################
-#
-# Get test report
-# - do any test result post processing your test results
-#   need here
-# - also any additional files can be retrieved here
-# - retrieve files from device
-#########################################################
 mv test-reports/*.xml TEST-all.xml
