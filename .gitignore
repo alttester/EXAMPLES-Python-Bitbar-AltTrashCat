@@ -5,3 +5,5 @@ test-package_android.zip
 __pycache__
 appium.log
 test-reports/report.xml
+AltUnityTesterLog.txt
+test-package_ios.zip

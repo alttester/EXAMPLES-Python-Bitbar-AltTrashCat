@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 
 sys.path.append(os.path.dirname(__file__))
 
@@ -24,7 +25,7 @@ class TestBase(unittest.TestCase):
         cls.desired_caps['app'] = os.getenv("APPIUM_APPFILE", "application.apk")
         cls.desired_caps['automationName'] = os.getenv('APPIUM_AUTOMATION', 'UIAutomator2')
         cls.driver = webdriver.Remote('http://localhost:4723/wd/hub', cls.desired_caps)
-
+        time.sleep(10)
         cls.altdriver = AltrunUnityDriver(cls.driver, cls.platform)
 
     @classmethod
