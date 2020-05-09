@@ -34,6 +34,6 @@ export APPIUM_AUTOMATION="uiautomator2"
 echo "Running tests:"
 rm -rf screenshots
 
-python -m pytest -s tests/start_page_test.py --junitxml=test-reports/report.xml
+python -m pytest -s tests/ --junitxml=test-reports/report.xml
 
 killall node
