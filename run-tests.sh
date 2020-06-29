@@ -1,56 +1,55 @@
 #!/bin/bash
 
-# Name of the test file
-TEST=${TEST:="BitbarSampleAppTest.py"}
+##
+## Work in progress! The dependency installations need to be done to the
+## container so that we don't need to install them here.
+##
+TEST=${TEST:="BitbarSampleAppTest.py"} #Name of the test file
 
+##### Cloud testrun dependencies start
 echo "Extracting tests.zip..."
-unzip -o tests.zip
+unzip tests.zip
 
-echo "Setting up python env:"
-python3 -m venv .venv
+echo "Installing pip for python"
+python -m venv .venv
 source .venv/bin/activate
 
-echo "Installing requirements"
+echo "Installing Appium Python Client 0.24 and xmlrunner 1.7.7"
 chmod 0755 requirements.txt
 pip install -r requirements.txt
 
-
-#########################################################
-#
-# Preparing to start Appium
-# - UDID is the device ID on which test will run and
-#   required parameter on iOS test runs
-# - appium - is a wrapper tha calls the latest installed
-#   Appium server. Additional parameters can be passed
-#   to the server here.
-#
-#########################################################
-
-echo "UDID set to ${IOS_UDID}"
 echo "Starting Appium ..."
-appium -U ${IOS_UDID}  --log-no-colors --log-timestamp --command-timeout 120
 
+appium --log-no-colors --log-timestamp
 
-#########################################################
-#
-# Setting of environment variables used later in test
-# - used for Appium desired capabilities
-# - note, APPIUM_URL is same for local and cloud server
-#   runs
-#########################################################
-export APPIUM_APPFILE="$PWD/application.ipa"
-export APPIUM_URL="http://localhost:4723/wd/hub"
+ps -ef|grep appium
+##### Cloud testrun dependencies end.
+
+export APPIUM_APPFILE=$PWD/application.apk #App file is at current working folder
+
+## Desired capabilities:
+
+export APPIUM_URL="http://localhost:4723/wd/hub" # Local & Cloud
 export APPIUM_DEVICE="Local Device"
-export APPIUM_PLATFORM="IOS"
-export APPIUM_AUTOMATION="XCUITest"
+export APPIUM_PLATFORM="android"
 
+APILEVEL=$(adb shell getprop ro.build.version.sdk)
+APILEVEL="${APILEVEL//[$'\t\r\n']}"
+echo "API level is: ${APILEVEL}"
 
-## check iproxy
-iproxy --version
+## APPIUM_AUTOMATION
+if [ "$APILEVEL" -gt "16" ]; then
+  echo "Setting APPIUM_AUTOMATION=Appium"
+  export APPIUM_AUTOMATION="uiautomator2"
+else
+  echo "Setting APPIUM_AUTOMATION=selendroid"
+  export APPIUM_AUTOMATION="Selendroid"
+fi
 
-## Start test execution
 ## Run the test:
 echo "Running tests"
-python3 -m pytest -s tests/ --junitxml=test-reports/report.xml
+
+rm -rf screenshots
+python -m pytest tests/ --junitxml=test-reports/report.xml
 
 mv test-reports/*.xml TEST-all.xml
