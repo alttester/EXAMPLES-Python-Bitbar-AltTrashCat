@@ -1,10 +1,23 @@
 #!/bin/bash
 
-##
-## Work in progress! The dependency installations need to be done to the
-## container so that we don't need to install them here.
-##
-TEST=${TEST:="BitbarSampleAppTest.py"} #Name of the test file
+## Environment variables setup
+export PLATFORM_NAME="Android"
+export UDID=${ANDROID_SERIAL}
+export APPIUM_PORT="4723"
+
+APILEVEL=$(adb shell getprop ro.build.version.sdk)
+APILEVEL="${APILEVEL//[$'\t\r\n']}"
+export PLATFORM_VERSION=${APILEVEL}
+echo "API level is: ${APILEVEL}"
+if [ "$APILEVEL" -gt "19" ]; then
+	export AUTOMATION_NAME="UiAutomator2"
+	echo "UiAutomator2"
+else
+	export AUTOMATION_NAME="UiAutomator1"
+	echo "UiAutomator1"
+fi
+
+TEST=${TEST:="SampleAppTest"}
 
 ##### Cloud testrun dependencies start
 echo "Extracting tests.zip..."
@@ -19,32 +32,12 @@ chmod 0755 requirements.txt
 pip install -r requirements.txt
 
 echo "Starting Appium ..."
-
-appium --log-no-colors --log-timestamp
+appium --log-no-colors --log-timestamp  --command-timeout 60  > appium.log 2>&1 &
 
 ps -ef|grep appium
 ##### Cloud testrun dependencies end.
 
 export APPIUM_APPFILE=$PWD/application.apk #App file is at current working folder
-
-## Desired capabilities:
-
-export APPIUM_URL="http://localhost:4723/wd/hub" # Local & Cloud
-export APPIUM_DEVICE="Local Device"
-export APPIUM_PLATFORM="android"
-
-APILEVEL=$(adb shell getprop ro.build.version.sdk)
-APILEVEL="${APILEVEL//[$'\t\r\n']}"
-echo "API level is: ${APILEVEL}"
-
-## APPIUM_AUTOMATION
-if [ "$APILEVEL" -gt "16" ]; then
-  echo "Setting APPIUM_AUTOMATION=Appium"
-  export APPIUM_AUTOMATION="uiautomator2"
-else
-  echo "Setting APPIUM_AUTOMATION=selendroid"
-  export APPIUM_AUTOMATION="Selendroid"
-fi
 
 ## Run the test:
 echo "Running tests"
