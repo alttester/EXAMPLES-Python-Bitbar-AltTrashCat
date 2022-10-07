@@ -1,4 +1,4 @@
-from pages.base_page import BasePage
+from base_page import BasePage
 from altunityrunner import By
 class PauseOverlayPage(BasePage):
     def __init__(self, altdriver):
