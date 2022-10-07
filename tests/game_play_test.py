@@ -5,6 +5,7 @@ from pages.pause_overlay_page import PauseOverlayPage
 from pages.get_another_chance_page import GetAnotherChancePage
 import time
 from assertpy import assert_that
+
 class TestGamePlay(TestBase):
 
     def setUp(self):
