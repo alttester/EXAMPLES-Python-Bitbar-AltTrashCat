@@ -37,7 +37,7 @@ appium --log-no-colors --log-timestamp  --command-timeout 60  > appium.log 2>&1 
 ps -ef|grep appium
 ##### Cloud testrun dependencies end.
 
-export APPIUM_APPFILE=$PWD/application.apk #App file is at current working folder
+export APPIUM_APPFILE=$PWD/TrashCat.apk #App file is at current working folder
 
 ## Run the test:
 echo "Running tests"

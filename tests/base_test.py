@@ -1,13 +1,12 @@
+from alttester import AltDriver, AltPortForwarding
+from appium import webdriver
+from unittest import TestCase
 import os
 import sys
 import time
 
 sys.path.append(os.path.dirname(__file__))
 
-from unittest import TestCase
-import os
-from appium import webdriver
-from altunityrunner import AltUnityDriver, AltUnityPortForwarding
 
 class TestBase(TestCase):
     platform = None
@@ -20,32 +19,36 @@ class TestBase(TestCase):
             cls.platform = 'ios'
         print("Running on " + cls.platform)
         cls.desired_caps = {}
-        cls.desired_caps['platformName'] = os.getenv('APPIUM_PLATFORM', 'Android')
+        cls.desired_caps['platformName'] = os.getenv(
+            'APPIUM_PLATFORM', 'Android')
         cls.desired_caps['deviceName'] = os.getenv('APPIUM_DEVICE', 'device')
-        cls.desired_caps['app'] = os.getenv("APPIUM_APPFILE", "application.apk")
-        cls.desired_caps['automationName'] = os.getenv('APPIUM_AUTOMATION', 'UIAutomator2')
-        cls.driver = webdriver.Remote('http://localhost:4723/wd/hub', cls.desired_caps)
+        cls.desired_caps['app'] = os.getenv(
+            "APPIUM_APPFILE", "TrashCat.apk")
+        cls.desired_caps['automationName'] = os.getenv(
+            'APPIUM_AUTOMATION', 'UIAutomator2')
+        cls.driver = webdriver.Remote(
+            'http://localhost:4723/wd/hub', cls.desired_caps)
         print("Appium driver started")
         time.sleep(10)
         cls.setup_port_forwarding()
-        cls.altdriver = AltUnityDriver()
+        cls.altdriver = AltDriver()
 
     @classmethod
     def setup_port_forwarding(cls):
         try:
-            AltUnityPortForwarding.remove_all_forward_android()
+            AltPortForwarding.remove_all_forward_android()
         except:
             print("No adb forward was present")
         try:
-            AltUnityPortForwarding.kill_all_iproxy_process()
+            AltPortForwarding.kill_all_iproxy_process()
         except:
             print("No iproxy forward was present")
 
         if cls.platform == 'android':
-            AltUnityPortForwarding.forward_android()
+            AltPortForwarding.forward_android()
             print("Port forwarded (Android).")
         else:
-            AltUnityPortForwarding.forward_ios()
+            AltPortForwarding.forward_ios()
             print("Port forwarded (iOS).")
 
     @classmethod

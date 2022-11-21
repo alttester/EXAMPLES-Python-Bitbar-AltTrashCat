@@ -1,5 +1,6 @@
 from base_page import BasePage
-from altunityrunner import By
+from alttester import By
+
 
 class StartPage(BasePage):
     def __init__(self, altdriver):
