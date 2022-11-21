@@ -29,7 +29,9 @@ source .venv/bin/activate
 
 echo "Installing Appium Python Client 0.24 and xmlrunner 1.7.7"
 chmod 0755 requirements.txt
-pip install -r requirements.txt
+echo "Python version:"
+which python
+python -m pip install -r requirements.txt
 
 echo "Starting Appium ..."
 appium --log-no-colors --log-timestamp  --command-timeout 60  > appium.log 2>&1 &
