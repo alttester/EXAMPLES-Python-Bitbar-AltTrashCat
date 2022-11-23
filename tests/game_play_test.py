@@ -1,9 +1,8 @@
-from .base_test import TestBase
-from pages.game_play_page import GamePlayPage
+from tests.base_test import TestBase
 from pages.main_menu_page import MainMenuPage
+from pages.game_play_page import GamePlayPage
 from pages.pause_overlay_page import PauseOverlayPage
 from pages.get_another_chance_page import GetAnotherChancePage
-
 from assertpy import assert_that
 
 
@@ -37,7 +36,7 @@ class TestGamePlay(TestBase):
 
     def test_avoiding_obstacles(self):
         self.game_play_page.avoid_obstacles(5)
-        # check that player has 2 or 3 lives left (sometimes 1 life is lost right when stopping the tests)
+    # check that player has 2 or 3 lives left (sometimes 1 life is lost right when stopping the tests)
         assert_that(self.game_play_page.get_current_life()).described_as(
             "player current life").is_greater_than(0)
 

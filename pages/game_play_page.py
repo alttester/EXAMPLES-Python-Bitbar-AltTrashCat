@@ -1,5 +1,6 @@
-from pages.base_page import BasePage
 from alttester import By
+
+from pages.base_page import BasePage
 
 
 class GamePlayPage(BasePage):
@@ -9,79 +10,103 @@ class GamePlayPage(BasePage):
 
     @property
     def pause_button(self):
-        return self.altdriver.wait_for_object(By.NAME, 'Game/WholeUI/pauseButton', timeout=2)
+        return self.altdriver.wait_for_object(By.NAME,
+                                              'UICamera/Game/WholeUI/pauseButton',
+                                              timeout=2)
 
     @property
     def character(self):
-        return self.altdriver.wait_for_object(By.NAME, 'PlayerPivot', timeout=2)
+        return self.altdriver.wait_for_object(By.NAME,
+                                              'PlayerPivot',
+                                              timeout=2)
+
+    @property
+    def obstacles(self):
+        return self.altdriver.find_objects_which_contain(By.NAME, 'Obstacle')
 
     def is_displayed(self):
-        if self.pause_button and self.character:
-            return True
+        return self.pause_button and self.character
 
     def press_pause(self):
         self.pause_button.tap()
 
     def get_current_life(self):
-        return int(self.character.call_component_method("CharacterInputController", "get_currentLife", parameters=[]))
+        return int(self.character.get_component_property(
+            'CharacterInputController', 'currentLife', 'Assembly-CSharp'))
 
-    def avoid_obstacles(self, number_of_obstacles=10):
-        character = self.altdriver.find_object(By.NAME, "PlayerPivot")
-        # set character to be invincible for this method
-        # character.call_component_method("CharacterInputController", "CheatInvincible", "true")
+    def jump(self):
+        self.character.call_component_method(
+            'CharacterInputController', 'Jump', 'Assembly-CSharp')
+
+    def move_right(self):
+        self.character.call_component_method(
+            'CharacterInputController', 'ChangeLane', 'Assembly-CSharp',
+            parameters=['1'])
+
+    def move_left(self):
+        self.character.call_component_method(
+            'CharacterInputController', 'ChangeLane', 'Assembly-CSharp',
+            parameters=['-1'])
+
+    def avoid_obstacles(self, number_of_obstacles=10, invincible=False):
+        character = self.character
+
+        if invincible:
+            character.call_component_method(
+                'CharacterInputController', 'CheatInvincible',
+                'Assembly-CSharp', parameters=['true'])
+
         moved_left = False
         moved_right = False
 
-        for i in range(0, number_of_obstacles):
-            all_obstacles_unsorted = self.altdriver.find_objects_which_contain(
-                By.NAME, "Obstacle")
-            all_obstacles = sorted(
-                all_obstacles_unsorted, key=lambda k: float(k.worldZ))
-            obstacles = []
-            for o in all_obstacles:
-                if (float(character.worldZ) < float(o.worldZ)):
-                    obstacles.append(o)
+        for _ in range(number_of_obstacles):
+            obstacles = [
+                obstacle for obstacle in self.obstacles if character.worldZ < obstacle.worldZ]
+            obstacles = sorted(
+                self.obstacles, key=lambda obstacle: obstacle.worldZ)
+
             obstacle = obstacles[0]
+            next_obstacle = obstacles[1]
+            print('OBSTACLE: {}, z: {}, x: {}'.format(
+                obstacle.name, obstacle.worldZ, obstacle.worldX))
+            print('NEXT: {}, z: {}, x: {}'.format(next_obstacle.name,
+                  next_obstacle.worldZ, next_obstacle.worldX))
 
-            while (float(obstacle.worldZ) - float(character.worldZ) > 5):
+            while obstacle.worldZ - character.worldZ > 5:
+                character = self.character
                 obstacle = self.altdriver.find_object(By.ID, obstacle.id)
-                character = self.altdriver.find_object(By.NAME, "PlayerPivot")
 
-            if "Barrier" in obstacle.name or "Rat" in obstacle.name:
-                character.call_component_method(
-                    "CharacterInputController", "Jump", parameters=[])
+            if 'Barrier' in obstacle.name or 'Rat' in obstacle.name:
+                self.jump()
             else:
-                if float(obstacle.worldZ) == float(obstacles[1].worldZ):
-                    if float(obstacle.worldX) == float(character.worldX):
-                        if float(obstacles[1].worldX) == -1.5:
-                            character.call_component_method(
-                                "CharacterInputController", "ChangeLane", parameters=["1"])
+                if obstacle.worldZ == next_obstacle.worldZ:
+                    if obstacle.worldX == character.worldX:
+                        if next_obstacle.worldX == -1.5:
+                            self.move_right()
                             moved_right = True
                         else:
-                            character.call_component_method(
-                                "CharacterInputController", "ChangeLane", parameters=["-1"])
+                            self.move_left()
                             moved_left = True
-                    elif float(obstacles[1].worldX) == float(character.worldX):
-                        if float(obstacle.worldX) == -1.5:
-                            character.call_component_method(
-                                "CharacterInputController", "ChangeLane", parameters=["1"])
+                    elif next_obstacle.worldX == character.worldX:
+                        if obstacle.worldX == -1.5:
+                            self.move_right()
                             moved_right = True
                         else:
-                            character.call_component_method(
-                                "CharacterInputController", "ChangeLane", parameters=["-1"])
+                            self.move_left()
                             moved_left = True
-                elif float(obstacle.worldX) == float(character.worldX):
-                    character.call_component_method(
-                        "CharacterInputController", "ChangeLane", parameters=["1"])
+                elif obstacle.worldX == character.worldX:
+                    self.move_right()
                     moved_right = True
-            while (float(character.worldZ) < float(obstacle.worldZ) and float(character.worldX) < 99):
+
+            while character.worldZ < obstacle.worldZ and character.worldX < 99:
                 obstacle = self.altdriver.find_object(By.ID, obstacle.id)
-                character = self.altdriver.find_object(By.NAME, "PlayerPivot")
+                character = self.character
+
+            # move back to the center lane
             if moved_left:
-                character.call_component_method(
-                    "CharacterInputController", "ChangeLane", parameters=["1"])
+                self.move_right()
                 moved_left = False
+
             if moved_right:
-                character.call_component_method(
-                    "CharacterInputController", "ChangeLane", parameters=["-1"])
+                self.move_left()
                 moved_right = False

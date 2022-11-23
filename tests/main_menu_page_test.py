@@ -1,7 +1,7 @@
 
 
 from pages.main_menu_page import MainMenuPage
-from .base_test import TestBase
+from tests.base_test import TestBase
 
 
 class TestMainMenuPage(TestBase):

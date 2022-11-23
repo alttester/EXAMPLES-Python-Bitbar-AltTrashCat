@@ -10,10 +10,15 @@ echo "Setting up python env:"
 python3 -m venv .venv
 source .venv/bin/activate
 
-echo "Installing requirements"
+echo "Installing pip requirements"
 chmod 0755 requirements.txt
-pip install -r requirements.txt
-
+apt-get --assume-yes install python3.7
+python3 --version
+python3.7 --version
+python3.7 -m pip install --upgrade pip
+python3.7 -m pip install wheel
+python3.7 -m pip install -r requirements.txt
+python3.7 -m pip list
 
 #########################################################
 #
@@ -51,6 +56,6 @@ iproxy --version
 ## Start test execution
 ## Run the test:
 echo "Running tests"
-python3 -m pytest -s tests/ --junitxml=test-reports/report.xml
+python3.7 -m pytest -s tests/ --junitxml=test-reports/report.xml
 
 mv test-reports/*.xml TEST-all.xml

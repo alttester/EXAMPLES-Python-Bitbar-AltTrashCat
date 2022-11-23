@@ -1,6 +1,6 @@
+from unittest import TestCase
 from alttester import AltDriver, AltPortForwarding
 from appium import webdriver
-from unittest import TestCase
 import os
 import sys
 import time
@@ -23,7 +23,7 @@ class TestBase(TestCase):
             'APPIUM_PLATFORM', 'Android')
         cls.desired_caps['deviceName'] = os.getenv('APPIUM_DEVICE', 'device')
         cls.desired_caps['app'] = os.getenv(
-            "APPIUM_APPFILE", "TrashCat.apk")
+            "APPIUM_APPFILE", os.path.abspath("application.apk"))
         cls.desired_caps['automationName'] = os.getenv(
             'APPIUM_AUTOMATION', 'UIAutomator2')
         cls.driver = webdriver.Remote(

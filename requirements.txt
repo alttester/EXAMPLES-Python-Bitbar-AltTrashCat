@@ -4,6 +4,6 @@ virtualenv
 AltTester-Driver==1.8.0
 assertpy
 pytest-html
-Appium-Python-Client==2.3.0
+Appium-Python-Client
 selenium==4.1
 xmlrunner==1.7.7
