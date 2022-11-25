@@ -6,10 +6,6 @@ TEST=${TEST:="BitbarSampleAppTest.py"}
 echo "Extracting tests.zip..."
 unzip -o tests.zip
 
-echo "Setting up python env:"
-python3 -m venv .venv
-source .venv/bin/activate
-
 echo "Installing pip requirements"
 chmod 0755 requirements.txt
 apt-get --assume-yes install python3.7
