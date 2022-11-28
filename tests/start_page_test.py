@@ -11,8 +11,8 @@ class TestStartPage(TestBase):
         self.main_menu_page = MainMenuPage(self.altdriver)
 
     def test_start_page_loaded_correctly(self):
-        assert (self.start_page.is_displayed())
+        assert self.start_page.is_displayed()
 
     def test_start_button_loads_main_menu(self):
         self.start_page.press_start()
-        assert (self.main_menu_page.is_displayed())
+        assert self.main_menu_page.is_displayed()
