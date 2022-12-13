@@ -26,10 +26,11 @@ class TestBase(TestCase):
             "APPIUM_APPFILE", os.path.abspath("application.apk"))
         cls.desired_caps['automationName'] = os.getenv(
             'APPIUM_AUTOMATION', 'UIAutomator2')
+        time.sleep(15)
         cls.driver = webdriver.Remote(
             'http://localhost:4723/wd/hub', cls.desired_caps)
         print("Appium driver started")
-        time.sleep(10)
+        time.sleep(15)
         cls.setup_port_forwarding()
         cls.altdriver = AltDriver()
 

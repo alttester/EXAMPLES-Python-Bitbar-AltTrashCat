@@ -14,41 +14,41 @@ class MainMenuPage(BasePage):
     def store_button(self):
         return self.altdriver.wait_for_object(By.PATH,
                                               "//UICamera/Loadout/StoreButton",
-                                              timeout=2)
+                                              timeout=5)
 
     @property
     def leader_board_button(self):
         return self.altdriver.wait_for_object(By.PATH,
                                               "//UICamera/Loadout/OpenLeaderboard",
-                                              timeout=2)
+                                              timeout=5)
 
     @property
     def settings_button(self):
         return self.altdriver.wait_for_object(By.PATH,
                                               "//UICamera/Loadout/SettingButton",
-                                              timeout=2)
+                                              timeout=5)
 
     @property
     def mission_button(self):
         return self.altdriver.wait_for_object(By.PATH,
                                               "//UICamera/Loadout/MissionButton",
-                                              timeout=2)
+                                              timeout=5)
 
     @property
     def run_button(self):
         return self.altdriver.wait_for_object(By.PATH,
                                               "//UICamera/Loadout/StartButton",
-                                              timeout=2)
+                                              timeout=5)
 
     @property
     def character_name(self):
-        return self.altdriver.wait_for_object(By.NAME, "CharName", timeout=2)
+        return self.altdriver.wait_for_object(By.NAME, "CharName", timeout=5)
 
     @property
     def theme_name(self):
         return self.altdriver.wait_for_object(By.PATH,
                                               "//UICamera/Loadout/ThemeZone",
-                                              timeout=2)
+                                              timeout=5)
 
     def is_displayed(self):
         if self.store_button and self.leader_board_button \

@@ -10,19 +10,19 @@ class PauseOverlayPage(BasePage):
     def resume_button(self):
         return self.altdriver.wait_for_object(By.PATH,
                                               "//Game/PauseMenu/Resume",
-                                              timeout=2)
+                                              timeout=5)
 
     @property
     def main_menu_button(self):
         return self.altdriver.wait_for_object(By.PATH,
                                               "//Game/PauseMenu/Exit",
-                                              timeout=2)
+                                              timeout=5)
 
     @property
     def title(self):
         return self.altdriver.wait_for_object(By.PATH,
                                               "//Game/PauseMenu/Text",
-                                              timeout=2)
+                                              timeout=5)
 
     def is_displayed(self):
         if self.resume_button and self.main_menu_button and self.title:

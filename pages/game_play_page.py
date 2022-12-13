@@ -12,13 +12,13 @@ class GamePlayPage(BasePage):
     def pause_button(self):
         return self.altdriver.wait_for_object(By.NAME,
                                               'UICamera/Game/WholeUI/pauseButton',
-                                              timeout=2)
+                                              timeout=5)
 
     @property
     def character(self):
         return self.altdriver.wait_for_object(By.NAME,
                                               'PlayerPivot',
-                                              timeout=2)
+                                              timeout=5)
 
     @property
     def obstacles(self):
