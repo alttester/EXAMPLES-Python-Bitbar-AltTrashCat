@@ -18,7 +18,7 @@ sleep 10
 ps -ef|grep appium
 ##### Cloud testrun dependencies end.
 
-export APPIUM_APPFILE=$PWD/application.apk #App file is at current working folder
+export APPIUM_APPFILE=$PWD/TrashCat.apk #App file is at current working folder
 
 ## Desired capabilities:
 

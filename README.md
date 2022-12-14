@@ -1,5 +1,11 @@
 This demo project contains a pre-built ***ipa*** and ***apk*** file, so you can try out running tests on both Android and iOS
 
+### Running the tests on Android
+The app is provided at https://altom.com/app/uploads/AltTester/TrashCat/TrashCatAndroid.zip and needs to be included unzipped under project.
+
+### Running the tests on iOS
+The app is provided at https://altom.com/app/uploads/AltTester/TrashCat/TrashCat.ipa.zip and needs to be included unzipped under project.
+
 **Steps to run the tests:**
 1. From the cloned repository, run the *`create-bitbar-package.sh <ios|android>`* script, choosing your desired os as a parameter. This will create a **.zip** file, containing all the files required to execute the tests;
 

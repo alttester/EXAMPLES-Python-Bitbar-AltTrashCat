@@ -1,20 +1,28 @@
 from pages.base_page import BasePage
+from alttester import By
+
 
 class GetAnotherChancePage(BasePage):
     def __init__(self, altdriver):
         BasePage.__init__(self, altdriver)
-        
+
     @property
     def game_over_button(self):
-       return self.altdriver.wait_for_element("Game/DeathPopup/GameOver", timeout=2)
+        return self.altdriver.wait_for_object(By.PATH,
+                                              "//Game/DeathPopup/GameOver",
+                                              timeout=5)
 
     @property
     def premium_button(self):
-       return self.altdriver.wait_for_element("Game/DeathPopup/ButtonLayout/Premium Button", timeout=2)
+        return self.altdriver.wait_for_object(By.PATH,
+                                              "//Game/DeathPopup/ButtonLayout/Premium Button",
+                                              timeout=5)
 
     @property
     def available_currency(self):
-       return int(self.altdriver.wait_for_element("Game/DeathPopup/PremiumDisplay/PremiumOwnCount", timeout=2).get_text())
+        return int(self.altdriver.wait_for_object(By.PATH,
+                                                  "//Game/DeathPopup/PremiumDisplay/PremiumOwnCount",
+                                                  timeout=5).get_text())
 
     def is_displayed(self):
         if self.game_over_button and self.premium_button:
