@@ -11,8 +11,8 @@ class GamePlayPage(BasePage):
     @property
     def pause_button(self):
         return self.altdriver.wait_for_object(By.NAME,
-                                              'UICamera/Game/WholeUI/pauseButton',
-                                              timeout=5)
+                                               'pauseButton',
+                                                 timeout=5)
 
     @property
     def character(self):
