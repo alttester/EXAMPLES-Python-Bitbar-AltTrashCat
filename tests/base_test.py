@@ -1,6 +1,7 @@
 from unittest import TestCase
-from alttester import AltDriver, AltPortForwarding
+from alttester import AltDriver
 from appium import webdriver
+from appium.options.common import AppiumOptions
 import os
 import sys
 import time
@@ -17,40 +18,18 @@ class TestBase(TestCase):
             cls.platform = 'android'
         else:
             cls.platform = 'ios'
-        print("Running on " + cls.platform)
-        cls.desired_caps = {}
-        cls.desired_caps['platformName'] = os.getenv(
-            'APPIUM_PLATFORM', 'Android')
-        cls.desired_caps['deviceName'] = os.getenv('APPIUM_DEVICE', 'device')
-        cls.desired_caps['app'] = os.getenv(
-            "APPIUM_APPFILE", os.path.abspath("application.apk"))
-        cls.desired_caps['automationName'] = os.getenv(
-            'APPIUM_AUTOMATION', 'UIAutomator2')
+
+        options = AppiumOptions()
+        options.platform_name = 'Android'
+        options.automation_name = "UiAutomator2"
+        options.set_capability("app", os.path.abspath("application.apk"))
+        
         time.sleep(15)
+        
         cls.driver = webdriver.Remote(
-            'http://localhost:4723/wd/hub', cls.desired_caps)
-        print("Appium driver started")
+            'http://localhost:4723/wd/hub', options=options)
         time.sleep(15)
-        cls.setup_port_forwarding()
         cls.altdriver = AltDriver()
-
-    @classmethod
-    def setup_port_forwarding(cls):
-        try:
-            AltPortForwarding.remove_all_forward_android()
-        except:
-            print("No adb forward was present")
-        try:
-            AltPortForwarding.kill_all_iproxy_process()
-        except:
-            print("No iproxy forward was present")
-
-        if cls.platform == 'android':
-            AltPortForwarding.forward_android()
-            print("Port forwarded (Android).")
-        else:
-            AltPortForwarding.forward_ios()
-            print("Port forwarded (iOS).")
 
     @classmethod
     def tearDownClass(cls):

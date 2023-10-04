@@ -7,7 +7,7 @@
 
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home
 
-echo "Installing Appium Python Client 0.24 and xmlrunner 1.7.7"
+echo "Installing Appium Python Client 0.24 and xmlrunner"
 chmod 0755 requirements.txt
 pip install -r requirements.txt
 
@@ -22,6 +22,7 @@ export APPIUM_APPFILE=$PWD/TrashCat.apk #App file is at current working folder
 
 ## Desired capabilities:
 
+#for Appium 2.1.* the URL will be http://localhost:4723
 export APPIUM_URL="http://localhost:4723/wd/hub" # Local & Cloud
 export APPIUM_DEVICE="Local Device"
 export APPIUM_PLATFORM="android"
