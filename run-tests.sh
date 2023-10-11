@@ -3,25 +3,6 @@ echo "==> Setup ADB port reverse..."
 adb reverse --remove-all
 adb reverse tcp:13000 tcp:13000
 
-## Environment variables setup
-export PLATFORM_NAME="Android"
-export UDID=${ANDROID_SERIAL}
-export APPIUM_PORT="4723"
-
-APILEVEL=$(adb shell getprop ro.build.version.sdk)
-APILEVEL="${APILEVEL//[$'\t\r\n']}"
-export PLATFORM_VERSION=${APILEVEL}
-echo "API level is: ${APILEVEL}"
-if [ "$APILEVEL" -gt "19" ]; then
-	export AUTOMATION_NAME="UiAutomator2"
-	echo "UiAutomator2"
-else
-	export AUTOMATION_NAME="UiAutomator1"
-	echo "UiAutomator1"
-fi
-
-#TEST=${TEST:="SampleAppTest"}
-
 ## Cloud testrun dependencies start
 echo "Extracting tests.zip..."
 unzip tests.zip
@@ -40,8 +21,6 @@ python3.10 -m pip list
 echo "Starting Appium ..."
 appium --log-no-colors --log-timestamp  --command-timeout 60  > appium.log 2>&1 &
 ps -ef|grep appium
-
-export APPIUM_APPFILE=$PWD/application.apk # App file is at current working folder
 
 export LICENSE_KEY=$(cat license.txt)
 

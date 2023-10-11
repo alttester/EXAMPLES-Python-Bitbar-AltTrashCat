@@ -14,18 +14,14 @@ class TestBase(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        if os.getenv("APPIUM_PLATFORM", "android") == 'android':
-            cls.platform = 'android'
-        else:
-            cls.platform = 'ios'
 
         options = AppiumOptions()
         options.platform_name = 'Android'
         options.automation_name = "UiAutomator2"
         options.set_capability("app", os.path.abspath("application.apk"))
-        
+
         time.sleep(15)
-        
+
         cls.driver = webdriver.Remote(
             'http://localhost:4723/wd/hub', options=options)
         time.sleep(15)
