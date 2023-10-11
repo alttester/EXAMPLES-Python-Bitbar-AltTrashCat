@@ -1,7 +1,7 @@
 from unittest import TestCase
 from alttester import AltDriver
 from appium import webdriver
-from appium.options.common import AppiumOptions
+from appium.options.ios import XCUITestOptions
 import os
 import sys
 import time
@@ -17,19 +17,20 @@ class TestBase(TestCase):
 
         HOST_ALT_SERVER = os.getenv("HOST_ALT_SERVER")
         BITBAR_APIKEY = os.getenv("BITBAR_APIKEY")
-        BITBAR_APP_ID_SDK_202 = os.getenv("BITBAR_APP_ID_SDK_202")
+        BITBAR_APP_ID_SDK_202_IPA = os.getenv("BITBAR_APP_ID_SDK_202_IPA")
 
-        options = AppiumOptions()
-        options.platform_name = 'Android'
-        options.automation_name = "UiAutomator2"
+        options = XCUITestOptions()
+        options.platform_name = 'iOS'
+        options.automation_name = "XCUITest"
+        options.set_capability("deviceName", "Apple iPhone SE 2020 A2296 13.4.1")
+        options.set_capability("appium:bundleId", "fi.altom.trashcat")
         options.set_capability("bitbar_apiKey", BITBAR_APIKEY)
-        options.set_capability("bitbar_project", "client-side: AltServer on custom host; Android")
-        options.set_capability("bitbar_testrun", "Start Page Tests on Samsung")
-        options.set_capability("app", os.path.abspath("application.apk"))
+        options.set_capability("bitbar_project", "client-side: AltServer on custom host; iOS")
+        options.set_capability("bitbar_testrun", "Start Page Tests on Apple iPhone SE 2020 A2296 13.4.1")
         
         #See available devices at: https://cloud.bitbar.com/#public/devices
-        options.set_capability("bitbar_device", "Samsung Galaxy A52 -US")
-        options.set_capability("bitbar_app", BITBAR_APP_ID_SDK_202)
+        options.set_capability("bitbar_device", "Apple iPhone SE 2020 A2296 13.4.1")
+        options.set_capability("bitbar_app", BITBAR_APP_ID_SDK_202_IPA)
         time.sleep(15)
 
         cls.driver = webdriver.Remote(
