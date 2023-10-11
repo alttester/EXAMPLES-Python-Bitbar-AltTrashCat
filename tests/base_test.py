@@ -25,7 +25,6 @@ class TestBase(TestCase):
         options.set_capability("bitbar_apiKey", BITBAR_APIKEY)
         options.set_capability("bitbar_project", "client-side: AltServer on custom host; Android")
         options.set_capability("bitbar_testrun", "Start Page Tests on Samsung")
-        options.set_capability("app", os.path.abspath("application.apk"))
         
         #See available devices at: https://cloud.bitbar.com/#public/devices
         options.set_capability("bitbar_device", "Samsung Galaxy A52 -US")
